@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import CryptoSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +18,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let ts = Date().timeIntervalSince1970
+        let apiKey = API.shared.publicKey
+        let privKey = API.shared.privateKey
+        let md5 = ("\(ts)" + privKey + apiKey).md5()
+        
+        
+        
+        let parameters: Parameters = ["ts": ts, "apikey": apiKey, "hash": md5]
+        
+        
+        let url = API.shared.characterVireURL
+        
+        Alamofire.request(url!, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseJSON { (qwe) in
+            print(qwe)
+        }
+        
+        
+        
+        
         return true
     }
 
